@@ -4,15 +4,15 @@ class Animal extends Model {
 
   static init(sequelize) {
     super.init({
-      nome: { 
-        type: DataTypes.STRING, 
+      nome: {
+        type: DataTypes.STRING,
         validate: {
           notEmpty: { msg: "Nome do Animal deve ser preenchido!" },
           notNull: {msg: "Nome do Animal não pode ser nulo!"}
         }
       },
-      peso: { 
-        type: DataTypes.DOUBLE, 
+      peso: {
+        type: DataTypes.DOUBLE,
         validate: {
           isFloat: { msg: "Peso do Animal deve ser preenchido com um valor decimal!" },
           notEmpty: {msg: "Peso do Animal deve ser preenchido!"},
@@ -42,8 +42,9 @@ class Animal extends Model {
 
   static associate(models) {
     this.belongsTo(models.galpao, {as: "galpao", foreignKey: {name: "galpaoId"}})
+    this.belongsTo(models.entrada, {as: "entrada", foreignKey: {name: "entradaId"}})
   }
-  
+
 }
 
 export { Animal };
