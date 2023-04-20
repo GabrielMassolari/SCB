@@ -1,183 +1,92 @@
 import Sequelize from 'sequelize';
 import { databaseConfig } from "./database-config.js";
 
-import { Uf } from '../models/Uf.js';
-import { Cidade } from '../models/Cidade.js';
-import { Bairro } from '../models/Bairro.js';
+import { Animal } from '../models/Animal.js';
+import { Caminhao } from '../models/Caminhao.js';
 import { Cliente } from '../models/Cliente.js';
+import { Entrada } from '../models/Entrada.js';
 import { Funcionario } from '../models/Funcionario.js';
-import { Gerente } from '../models/Gerente.js';
-import { Telefone } from '../models/Telefone.js';
-import { TipoDeFilme } from '../models/TipoDeFilme.js';
-import { Diretor } from '../models/Diretor.js';
-import { Artista } from '../models/Artista.js';
-import { Filme } from '../models/Filme.js';
-import { Participacao } from '../models/Participacao.js';
-import { Fita } from '../models/Fita.js';
-import { Emprestimo } from '../models/Emprestimo.js';
-import { ItemDeEmprestimo } from '../models/ItemDeEmprestimo.js';
-import { Multa } from '../models/Multa.js';
-import { Devolucao } from '../models/Devolucao.js';
-import { Reserva } from '../models/Reserva.js';
+import { Galpao } from '../models/Galpao.js';
+import { ItemDeVenda } from '../models/ItemDeVenda.js';
+import { Venda } from '../models/Venda.js';
 import * as fs from 'fs';
 
 const sequelize = new Sequelize(databaseConfig);
 
-Uf.init(sequelize);
-Cidade.init(sequelize);
-Bairro.init(sequelize);
+Animal.init(sequelize);
+Caminhao.init(sequelize);
 Cliente.init(sequelize);
 Funcionario.init(sequelize);
-Gerente.init(sequelize);
-Telefone.init(sequelize);
-TipoDeFilme.init(sequelize);
-Diretor.init(sequelize);
-Artista.init(sequelize);
-Filme.init(sequelize);
-Participacao.init(sequelize);
-Fita.init(sequelize);
-Emprestimo.init(sequelize);
-ItemDeEmprestimo.init(sequelize);
-Multa.init(sequelize);
-Devolucao.init(sequelize);
-Reserva.init(sequelize);
+Entrada.init(sequelize);
+Galpao.init(sequelize);
+ItemDeVenda.init(sequelize);
+Venda.init(sequelize);
 
 // A ordem das efetivações das associações importa: neste exemplo, Uf.associate antes de Cidade.associate deixa foreignKey: { allowNull: true } poder ser null
-Uf.associate(sequelize.models);
-Cidade.associate(sequelize.models);
-Bairro.associate(sequelize.models);
+Animal.associate(sequelize.models);
 Cliente.associate(sequelize.models);
 Funcionario.associate(sequelize.models);
-Gerente.associate(sequelize.models);
-Telefone.associate(sequelize.models);
-TipoDeFilme.associate(sequelize.models);
-Diretor.associate(sequelize.models);
-Filme.associate(sequelize.models);
-Artista.associate(sequelize.models);
-Participacao.associate(sequelize.models);
-Fita.associate(sequelize.models);
-Emprestimo.associate(sequelize.models);
-ItemDeEmprestimo.associate(sequelize.models);
-Multa.associate(sequelize.models);
-Devolucao.associate(sequelize.models);
-Reserva.associate(sequelize.models);
+
+Animal.associate(sequelize.models);
+Caminhao.associate(sequelize.models);
+Cliente.associate(sequelize.models);
+Funcionario.associate(sequelize.models);
+Entrada.associate(sequelize.models);
+Galpao.associate(sequelize.models);
+ItemDeVenda.associate(sequelize.models);
+Venda.associate(sequelize.models);
+
 
 databaseInserts(); // comentar quando estiver em ambiente de produção (não criar tabelas e não inserir registros de teste)
 
 function databaseInserts() {
     (async () => {
 
-        await sequelize.sync({ force: true }); 
+        await sequelize.sync({ force: true });
+        const animal1 = await Animal.create({ nome: "Caracu", peso: 150.00, dataNacimento: "2000-02-10", dataVacinacao: "2003-03-08" });
+        const animal2 = await Animal.create({ nome: "Brangus", peso: 120.00, dataNacimento: "1998-05-11", dataVacinacao: "2000-02-10" });
+        const animal3 = await Animal.create({ nome: "Nelore", peso: 140.00, dataNacimento: "2001-03-20", dataVacinacao: "2005-08-11" });
+        const animal4 = await Animal.create({ nome: "Angus", peso: 90.00, dataNacimento: "1980-08-07", dataVacinacao: "2001-03-20" });
 
-        const uf1 = await Uf.create({ sigla: "ES", nome: "Espírito Santo" });
-        const uf2 = await Uf.create({ sigla: "MG", nome: "Minas Gerais" });
+        const galpao1 = await Galpao.create({nome: "Galpao 1", capacidade: 100, limiteDiario: 10, maternidade: false});
+        const galpao2 = await Galpao.create({nome: "Galpao 2", capacidade: 110, limiteDiario: 15, maternidade: false});
+        const galpao3 = await Galpao.create({nome: "Galpao 3", capacidade: 120, limiteDiario: 20, maternidade: true});
+        const galpao4 = await Galpao.create({nome: "Galpao 4", capacidade: 130, limiteDiario: 25, maternidade: false});
 
-        const cidade1 = await Cidade.create({ nome: "Cachoeiro", ufId: 1 });
-        const cidade2 = await Cidade.create({ nome: "Alegre", ufId: 1 });
-        const cidade3 = await Cidade.create({ nome: "Belo Horizonte", ufId: 2 });
-        const cidade4 = await Cidade.create({ nome: "Lavras", ufId: 2 });
+        const funcionario1 = await Funcionario.create({ nome: "Jose", cpf: "111.111.111-99", dataNascimento: "2000-02-10", salario: 2000 })
+        const funcionario2= await Funcionario.create({ nome: "Diogo", cpf: "111.111.111-22", dataNascimento: "2000-05-10", salario: 3000 })
+        const funcionario3 = await Funcionario.create({ nome: "Joao P", cpf: "111.111.111-33", dataNascimento: "2000-05-13'", salario: 4000 })
+        const funcionario4 = await Funcionario.create({ nome: "Sebastiao", cpf: "111.111.111-44", dataNascimento: "2000-12-10", salario: 1000 })
 
-        const bairro1 = await Bairro.create({ nome: "Vila do Sul", cidadeId: 1 });
-        const bairro2 = await Bairro.create({ nome: "Guararema", cidadeId: 1 });
-        const bairro3 = await Bairro.create({ nome: "Maria Ortiz", cidadeId: 2 });
-        const bairro4 = await Bairro.create({ nome: "Centro", cidadeId: 2 });
-        const bairro5 = await Bairro.create({ nome: "Barro Preto", cidadeId: 3 });
-        const bairro6 = await Bairro.create({ nome: "Cidade Jardim", cidadeId: 3 });
-        const bairro7 = await Bairro.create({ nome: "Vale do Sol", cidadeId: 4 });
-        const bairro8 = await Bairro.create({ nome: "Nova Lavras", cidadeId: 4 });
+        const entrada1 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 1 });
+        const entrada2 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 2, funcionarioId: 2 });
+        const entrada3 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 3, funcionarioId: 3 });
+        const entrada4 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 4, funcionarioId: 4 });
 
-        const cliente1 = await Cliente.create({ nome: "Cliente João", cpf: "111.111.111-11", rua: "Rua Dr. Brício Mesquita", numero: 1, debito: 0.0, nascimento: "1981-01-01", bairroId: 3 });
-        const cliente2 = await Cliente.create({ nome: "Cliente José", cpf: "222.222.222-22", rua: "Rua José Figueiredo", numero: 2, debito: 0.0, nascimento: "1982-02-02", bairroId: 1 });
+        animal1.update({galpaoId: 1, entradaId: 1})
+        animal2.update({galpaoId: 2, entradaId: 2})
+        animal3.update({galpaoId: 3, entradaId: 3})
+        animal4.update({galpaoId: 4, entradaId: 4})
 
-        const cliente1telefone1 = await Telefone.create({ numero: "(11) 1111-1111", clienteId: 1 });
-        const cliente1telefone2 = await Telefone.create({ numero: "(22) 2222-2222", clienteId: 1 });
-        const cliente2telefone1 = await Telefone.create({ numero: "(33) 3333-3333", clienteId: 2 });
-        const cliente2telefone2 = await Telefone.create({ numero: "(44) 4444-4444", clienteId: 2 });
+        const cliente1 = await Cliente.create({ nome: "João", email: "joao@gmail.com", cpf: "333.333.333-33", dataNascimento: "2000-02-10" });
+        const cliente2 = await Cliente.create({ nome: "Vitor", email: "vitor@hotmail.com", cpf: "123.543.223-33", dataNascimento: "1998-05-11" });
+        const cliente3 = await Cliente.create({ nome: "Jose", email: "jose@gmail.com", cpf: "543.332.313-73", dataNascimento: "2001-08-07" });
+        const cliente4 = await Cliente.create({ nome: "Vinicius", email: "vinicius@hotmail.com", cpf: "678.873.332-12", dataNascimento: "1990-08-02" });
 
-        const funcionario1 = await Funcionario.create({ nome: "Funcionário João", cpf: "333.333.333-33", rua: "Rua Dr. Brício Mesquita", numero: 1, login: "func1", senha: "123456", bairroId: 3 });
-        const funcionario2 = await Funcionario.create({ nome: "Funcionário José", cpf: "444.444.444-44", rua: "Rua José Figueiredo", numero: 2, login: "func2", senha: "123456", bairroId: 1 });
+        const caminhao1 = await Caminhao.create({ modelo: "Truck", ano: 2001, marca: "VW", quilometragem: 200000.0 });
+        const caminhao2 = await Caminhao.create({ modelo: "caminhao2", ano: 2020, marca: "Fiat", quilometragem: 120000.0 });
+        const caminhao3 = await Caminhao.create({ modelo: "caminhao3", ano: 2002, marca: "Ford", quilometragem: 150000.0 });
+        const caminhao4 = await Caminhao.create({ modelo: "caminhao4", ano: 2015, marca: "Hyundai", quilometragem: 80000.0 });
 
-        const funcionario1telefone1 = await Telefone.create({ numero: "(55) 5555-5555", funcionarioId: 1 });
-        const funcionario2telefone2 = await Telefone.create({ numero: "(66) 6666-6666", funcionarioId: 2 });
+        const venda1 = await Venda.create({ distanciaEntrega: 20, valor: 50 });
+        const venda2 = await Venda.create({ distanciaEntrega: 50, valor: 80 });
+        const venda3 = await Venda.create({ distanciaEntrega: 65, valor: 100 });
+        const venda4 = await Venda.create({ distanciaEntrega: 87, valor: 160 });
 
-        const gerente1 = await Gerente.create({ nome: "Gerente João", cpf: "555.555.555-55", rua: "Rua Dr. Brício Mesquita", numero: 1, login: "ger1", senha: "123456", bairroId: 3 });
-        const gerente2 = await Gerente.create({ nome: "Gerente José", cpf: "666.666.666-66", rua: "Rua José Figueiredo", numero: 2, login: "ger2", senha: "123456", bairroId: 1 });
-
-        const gerente1telefone1 = await Telefone.create({ numero: "(77) 7777-7777", gerenteId: 1 });
-        const gerente2telefone2 = await Telefone.create({ numero: "(88) 8888-8888", gerenteId: 2 });
-
-        const tipoDeFilme1 = await TipoDeFilme.create({ nome: "Promoção A", prazo: 1, preco: 5.00 });
-        const tipoDeFilme2 = await TipoDeFilme.create({ nome: "Promoção B", prazo: 2, preco: 10.00 });
-        const tipoDeFilme3 = await TipoDeFilme.create({ nome: "Promoção C", prazo: 3, preco: 15.00 });
-
-        const diretor1 = await Diretor.create({ nome: "Sheldon Lettich" });
-        const diretor2 = await Diretor.create({ nome: "James Cameron" });
-        const diretor3 = await Diretor.create({ nome: "Jon Landau" });
-        const diretor4 = await Diretor.create({ nome: "Quentin Tarantino" });
-
-        //const fs = require('fs');
-
-
-        const artista1ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista1.png')).toString('base64');
-        const artista2ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista2.png')).toString('base64');
-        const artista3ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista3.png')).toString('base64');
-        const artista4ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista4.png')).toString('base64');
-        const artista5ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista5.png')).toString('base64');
-        const artista6ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista6.png')).toString('base64');
-        const artista7ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/artista7.png')).toString('base64');
-
-        const artista1 = await Artista.create({ nome: "Jean Claude Van Damme", imagem: artista1ImagemBase64 });
-        const artista2 = await Artista.create({ nome: "Geoffrey Lewis", imagem: artista2ImagemBase64 });
-        const artista3 = await Artista.create({ nome: "Bolo Yeung", imagem: artista3ImagemBase64 });
-        const artista4 = await Artista.create({ nome: "Leonardo DiCaprio", imagem: artista4ImagemBase64 });
-        const artista5 = await Artista.create({ nome: "Kate Winslet", imagem: artista5ImagemBase64 });
-        const artista6 = await Artista.create({ nome: "Sam Worthington", imagem: artista6ImagemBase64 });
-        const artista7 = await Artista.create({ nome: "Zoë Saldaña", imagem: artista7ImagemBase64 });
-
-        const filme1ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/filme1.png')).toString('base64');
-        const filme2ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/filme2.png')).toString('base64');
-        const filme3ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/filme3.png')).toString('base64');
-        const filme4ImagemBase64 = Buffer.from(fs.readFileSync('./assets/images/filme4.png')).toString('base64');
-
-        const filme1 = await Filme.create({ titulo: "Duplo Impacto", genero: "Ação", duracao: "02:00", imagem: filme1ImagemBase64, tipoDeFilmeId: 1 });
-        const filme2 = await Filme.create({ titulo: "Titanic", genero: "Romance", duracao: "02:30", imagem: filme2ImagemBase64, tipoDeFilmeId: 2 });
-        const filme3 = await Filme.create({ titulo: "Avatar", genero: "Ficção Científica", duracao: "03:00", imagem: filme3ImagemBase64, tipoDeFilmeId: 3 });
-        const filme4 = await Filme.create({ titulo: "Dor e Glória", genero: "Drama", duracao: "03:00", imagem: filme4ImagemBase64, tipoDeFilmeId: 3 });
-
-        await filme1.addDiretores(diretor1, { through: 'filmes_diretores', });
-        await filme2.addDiretores(diretor2, { through: 'filmes_diretores' });
-        await filme3.addDiretores(diretor2, { through: 'filmes_diretores' });
-        await filme4.addDiretores(diretor3, { through: 'filmes_diretores' });
-        await filme4.addDiretores(diretor4, { through: 'filmes_diretores' });
-
-        const participacao1 = await Participacao.create({ personagem: "Alex", artistaId: artista1.id, filmeId: filme1.id });
-        const participacao2 = await Participacao.create({ personagem: "Chad", artistaId: artista1.id, filmeId: filme1.id });
-        const participacao3 = await Participacao.create({ personagem: "Frank", artistaId: artista2.id, filmeId: filme1.id });
-        const participacao4 = await Participacao.create({ personagem: "Moon", artistaId: artista3.id, filmeId: filme1.id });
-        const participacao5 = await Participacao.create({ personagem: "Jack", artistaId: artista4.id, filmeId: filme2.id });
-        const participacao6 = await Participacao.create({ personagem: "Rose", artistaId: artista5.id, filmeId: filme2.id });
-        const participacao7 = await Participacao.create({ personagem: "Jake Sully", artistaId: artista6.id, filmeId: filme3.id });
-        const participacao8 = await Participacao.create({ personagem: "Neytiri", artistaId: artista7.id, filmeId: filme3.id });
-
-        const fita1 = await Fita.create({ danificada: false, disponivel: false, filmeId: 1 });
-        const fita2 = await Fita.create({ danificada: false, disponivel: true, filmeId: 2 });
-        const fita3 = await Fita.create({ danificada: false, disponivel: false, filmeId: 3 });
-        const fita4 = await Fita.create({ danificada: false, disponivel: true, filmeId: 3 });
-        const fita5 = await Fita.create({ danificada: false, disponivel: true, filmeId: 4 });
-
-        const emprestimo1 = await Emprestimo.create({ data: "2023-04-10", valor: 15.0, clienteId: cliente1.id });
-        const emprestimo2 = await Emprestimo.create({ data: "2023-04-13", valor: 10.0, clienteId: cliente2.id });
-
-        const itemDeEmprestimo1 = await ItemDeEmprestimo.create({ emprestimoId: emprestimo1.id, fitaId: fita1.id, valor: 5.00, entrega: '2023-04-11' });
-        const itemDeEmprestimo2 = await ItemDeEmprestimo.create({ emprestimoId: emprestimo1.id, fitaId: fita2.id, valor: 10.00, entrega: '2023-04-12' });
-        const itemDeEmprestimo3 = await ItemDeEmprestimo.create({ emprestimoId: emprestimo2.id, fitaId: fita3.id, valor: 10.00, entrega: '2023-04-16' });
-
-        const devolucao1 = await Devolucao.create({ emprestimoId: emprestimo1.id, fitaId: fita1.id, data: '2023-04-12' });
-        const devolucao2 = await Devolucao.create({ emprestimoId: emprestimo1.id, fitaId: fita2.id, data: '2023-04-12' });
-
-        const multa1 = await Multa.create({ emprestimoId: emprestimo1.id, fitaId: fita1.id, valor: 5.00, pago: false });
-
-        const reserva1 = await Reserva.create({ clienteId: cliente1.id, fitaId: fita1.id, data: '2023-04-13', status: 1 });
+        const itemDeVenda1 = await ItemDeVenda.create({ animalId: animal1.id, vendaId: venda1.id, preco: 200.00 });
+        const itemDeVenda2 = await ItemDeVenda.create({ animalId: animal2.id, vendaId: venda2.id, preco: 300.00 });
+        const itemDeVenda3 = await ItemDeVenda.create({ animalId: animal3.id, vendaId: venda3.id, preco: 150.00 });
+        const itemDeVenda4 = await ItemDeVenda.create({ animalId: animal4.id, vendaId: venda4.id, preco: 800.00 });
     })();
 }
 
