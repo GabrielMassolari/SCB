@@ -23,21 +23,17 @@ ItemDeVenda.init(sequelize);
 Venda.init(sequelize);
 
 // A ordem das efetivações das associações importa: neste exemplo, Uf.associate antes de Cidade.associate deixa foreignKey: { allowNull: true } poder ser null
-Animal.associate(sequelize.models);
 Cliente.associate(sequelize.models);
-Funcionario.associate(sequelize.models);
-
-Animal.associate(sequelize.models);
 Caminhao.associate(sequelize.models);
-Cliente.associate(sequelize.models);
-Funcionario.associate(sequelize.models);
-Entrada.associate(sequelize.models);
 Galpao.associate(sequelize.models);
+Funcionario.associate(sequelize.models);
+Cliente.associate(sequelize.models);
+Animal.associate(sequelize.models);
+Entrada.associate(sequelize.models);
 ItemDeVenda.associate(sequelize.models);
 Venda.associate(sequelize.models);
 
-
-databaseInserts(); // comentar quando estiver em ambiente de produção (não criar tabelas e não inserir registros de teste)
+//databaseInserts(); // comentar quando estiver em ambiente de produção (não criar tabelas e não inserir registros de teste)
 
 function databaseInserts() {
     (async () => {

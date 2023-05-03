@@ -17,8 +17,7 @@ class Entrada extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.galpao, {as: "galpao", foreignKey: {name: "galpaoId"}})
-    this.hasMany(models.animal, {as: 'animais', onDelete: 'CASCADE', onUpdate: 'CASCADE'});
+    this.belongsTo(models.galpao, {as: "galpaoEntrada", foreignKey: {name: "galpaoId"}})
     this.belongsTo(models.funcionario, {as: "funcionario", foreignKey: {name: "funcionarioId"}})
   }
 

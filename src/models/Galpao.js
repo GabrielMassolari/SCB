@@ -37,7 +37,6 @@ class Galpao extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.entrada, {as: "entrada", foreignKey: {name: "entradaId"}})
   }
 
 }
