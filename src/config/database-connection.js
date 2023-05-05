@@ -10,6 +10,9 @@ import { Galpao } from '../models/Galpao.js';
 import { ItemDeVenda } from '../models/ItemDeVenda.js';
 import { Venda } from '../models/Venda.js';
 import * as fs from 'fs';
+import { Vacina } from '../models/Vacina.js';
+import { Lote } from '../models/Lote.js';
+import { Vacinacao } from '../models/Vacinacao.js';
 
 const sequelize = new Sequelize(databaseConfig);
 
@@ -21,6 +24,9 @@ Entrada.init(sequelize);
 Galpao.init(sequelize);
 ItemDeVenda.init(sequelize);
 Venda.init(sequelize);
+Vacina.init(sequelize);
+Lote.init(sequelize);
+Vacinacao.init(sequelize)
 
 // A ordem das efetivações das associações importa: neste exemplo, Uf.associate antes de Cidade.associate deixa foreignKey: { allowNull: true } poder ser null
 Cliente.associate(sequelize.models);
@@ -32,8 +38,11 @@ Animal.associate(sequelize.models);
 Entrada.associate(sequelize.models);
 ItemDeVenda.associate(sequelize.models);
 Venda.associate(sequelize.models);
+Vacina.associate(sequelize.models);
+Lote.associate(sequelize.models);
+Vacinacao.associate(sequelize.models)
 
-//databaseInserts(); // comentar quando estiver em ambiente de produção (não criar tabelas e não inserir registros de teste)
+databaseInserts(); // comentar quando estiver em ambiente de produção (não criar tabelas e não inserir registros de teste)
 
 function databaseInserts() {
     (async () => {
@@ -83,6 +92,10 @@ function databaseInserts() {
         const itemDeVenda2 = await ItemDeVenda.create({ animalId: animal2.id, vendaId: venda2.id, preco: 300.00 });
         const itemDeVenda3 = await ItemDeVenda.create({ animalId: animal3.id, vendaId: venda3.id, preco: 150.00 });
         const itemDeVenda4 = await ItemDeVenda.create({ animalId: animal4.id, vendaId: venda4.id, preco: 800.00 });
+
+        const vacina1 = await Vacina.create({ nome: 'Raiva' });
+
+        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinid: 1});
     })();
 }
 
