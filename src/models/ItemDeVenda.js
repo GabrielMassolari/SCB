@@ -17,6 +17,7 @@ class ItemDeVenda extends Model {
   }
 
   static associate(models) {
+    this.removeAttribute('id')
     this.belongsTo(models.animal, {as: "animal", foreignKey: {name: "animalId"}})
     this.belongsTo(models.venda, {as: "venda", foreignKey: {name: "vendaId"}})
   }

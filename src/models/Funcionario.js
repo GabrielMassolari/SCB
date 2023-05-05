@@ -1,4 +1,4 @@
-//Autor: Vitor Cogo
+//Autor: Vinicius Toledo
 import { Model, DataTypes } from 'sequelize';
 
 class Funcionario extends Model {

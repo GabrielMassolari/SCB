@@ -24,16 +24,16 @@ class VacinaService {
     static async update(req) {
         const { id } = req.params;
         const { nome } = req.body;
-        const obj = await Lote.findByPk(id, { include: { all: true, nested: true } });
+        const obj = await Vacina.findByPk(id, { include: { all: true, nested: true } });
         if (obj == null) throw 'Vacina não encontrada!';
         Object.assign(obj, { nome });
         await obj.save();
-        return await Lote.findByPk(obj.id, { include: { all: true, nested: true } });
+        return await Vacina.findByPk(obj.id, { include: { all: true, nested: true } });
     }
 
     static async delete(req) {
         const { id } = req.params;
-        const obj = await Lote.findByPk(id);
+        const obj = await Vacina.findByPk(id);
         if (obj == null) throw 'Vacina não encontrada!';
         await obj.destroy();
         return obj;

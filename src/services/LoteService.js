@@ -23,10 +23,10 @@ class LoteService {
 
     static async update(req) {
         const { id } = req.params;
-        const { lote, dataVencimento, quantidadeDoses, vacina } = req.body;
+        const { lote, dataVencimento, quantidadeDoses, vacinaid } = req.body;
         const obj = await Lote.findByPk(id, { include: { all: true, nested: true } });
         if (obj == null) throw 'Lote não encontrado!';
-        Object.assign(obj, { lote, dataVencimento, quantidadeDoses, vacinaId: vacina.id });
+        Object.assign(obj, { lote, dataVencimento, quantidadeDoses, vacinaid: vacinaid});
         await obj.save();
         return await Lote.findByPk(obj.id, { include: { all: true, nested: true } });
     }

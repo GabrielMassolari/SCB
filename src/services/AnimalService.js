@@ -16,17 +16,17 @@ class AnimalService {
   }
 
   static async create(req) {
-    const { nome, peso, dataNascimento, dataVacinacao, galpao, entrada } = req.body;
-    const obj = await Animal.create({ nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id, entradaId: entrada.id });
+    const { nome, peso, dataNascimento, dataVacinacao, galpao } = req.body;
+    const obj = await Animal.create({ nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id });
     return await Animal.findByPk(obj.id, { include: { all: true, nested: true } });
   }
 
   static async update(req) {
     const { id } = req.params;
-    const { nome, peso, dataNascimento, dataVacinacao, galpao, entrada  } = req.body;
+    const { nome, peso, dataNascimento, dataVacinacao, galpao  } = req.body;
     const obj = await Animal.findByPk(id, { include: { all: true, nested: true } });
     if (obj == null) throw 'Animal não encontrado!';
-    Object.assign(obj, { nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id, entradaId: entrada.id });
+    Object.assign(obj, { nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id });
     await obj.save();
     return await Animal.findByPk(obj.id, { include: { all: true, nested: true } });
   }

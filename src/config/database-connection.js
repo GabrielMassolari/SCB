@@ -94,8 +94,14 @@ function databaseInserts() {
         const itemDeVenda4 = await ItemDeVenda.create({ animalId: animal4.id, vendaId: venda4.id, preco: 800.00 });
 
         const vacina1 = await Vacina.create({ nome: 'Raiva' });
+        const vacina2 = await Vacina.create({ nome: 'Raiva2' });
+        const vacina3 = await Vacina.create({ nome: 'Raiva3' });
+        const vacina4 = await Vacina.create({ nome: 'Raiva4' });
 
-        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinid: 1});
+        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-12', vacinid: 1});
+        const lote2 = await Lote.create({lote: 'teste2', quantidadeDoses: 200, dataVencimento: '2023-05-11', vacinid: 1});
+        const lote3 = await Lote.create({lote: 'teste3', quantidadeDoses: 300, dataVencimento: '2023-05-15', vacinid: 1});
+        const lote4 = await Lote.create({lote: 'teste4', quantidadeDoses: 400, dataVencimento: '2023-05-16', vacinid: 1});
     })();
 }
 
