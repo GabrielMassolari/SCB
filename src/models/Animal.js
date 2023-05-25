@@ -39,7 +39,7 @@ class Animal extends Model {
 
   static associate(models) {
     this.belongsTo(models.galpao, {as: "galpaoAnimal", foreignKey: {name: "galpaoId"}})
-    this.belongsToMany(models.entrada, {through: 'animal_entrada'})
+    this.belongsTo(models.entrada, { as: 'entrada', foreignKey: {name: 'entradaId'}});
   }
 
 }
