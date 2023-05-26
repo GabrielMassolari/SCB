@@ -51,7 +51,7 @@ function databaseInserts() {
         const animal1 = await Animal.create({ nome: "Caracu", peso: 150.00, dataNascimento: "2000-02-10", dataVacinacao: "2003-03-08" });
         const animal2 = await Animal.create({ nome: "Brangus", peso: 120.00, dataNascimento: "1998-05-11", dataVacinacao: "2000-02-10" });
         const animal3 = await Animal.create({ nome: "Nelore", peso: 140.00, dataNascimento: "2001-03-20", dataVacinacao: "2005-08-11" });
-        const animal4 = await Animal.create({ nome: "Angus", peso: 90.00, dataNascimento: "2019-08-07", dataVacinacao: "2001-03-20" });
+        const animal4 = await Animal.create({ nome: "Angus", peso: 90.00, dataNascimento: "2019-08-07", dataVacinacao: "2023-03-20" });
 
         const galpao1 = await Galpao.create({nome: "Galpao 1", capacidade: 100, limiteDiario: 10, maternidade: false});
         const galpao2 = await Galpao.create({nome: "Galpao 2", capacidade: 110, limiteDiario: 15, maternidade: false});
@@ -83,22 +83,27 @@ function databaseInserts() {
         const caminhao3 = await Caminhao.create({ modelo: "caminhao3", ano: 2002, marca: "Ford", quilometragem: 150000.0 });
         const caminhao4 = await Caminhao.create({ modelo: "caminhao4", ano: 2015, marca: "Hyundai", quilometragem: 80000.0 });
 
-        const venda1 = await Venda.create({ distanciaEntrega: 20, valor: 50 });
-        const venda2 = await Venda.create({ distanciaEntrega: 50, valor: 80 });
-        const venda3 = await Venda.create({ distanciaEntrega: 65, valor: 100 });
-        const venda4 = await Venda.create({ distanciaEntrega: 87, valor: 160 });
+        const venda1 = await Venda.create({ distanciaEntrega: 20, dataVenda: "2023-05-10", preco: 2000, clienteId: cliente1.id, caminhaoId: caminhao1.id });
+        const venda2 = await Venda.create({ distanciaEntrega: 50, dataVenda: "2023-05-10", preco: 3000, clienteId: cliente2.id, caminhaoId: caminhao2.id });
+        const venda3 = await Venda.create({ distanciaEntrega: 65, dataVenda: "2022-05-10", preco: 1000, clienteId: cliente3.id, caminhaoId: caminhao3.id });
+        const venda4 = await Venda.create({ distanciaEntrega: 87, dataVenda: "2022-02-10", preco:200, clienteId: cliente3.id, caminhaoId: caminhao4.id });
 
-        const itemDeVenda1 = await ItemDeVenda.create({ animalId: animal1.id, vendaId: venda1.id, preco: 200.00 });
-        const itemDeVenda2 = await ItemDeVenda.create({ animalId: animal2.id, vendaId: venda2.id, preco: 300.00 });
-        const itemDeVenda3 = await ItemDeVenda.create({ animalId: animal3.id, vendaId: venda3.id, preco: 150.00 });
-        const itemDeVenda4 = await ItemDeVenda.create({ animalId: animal4.id, vendaId: venda4.id, preco: 800.00 });
+        const itemDeVenda1 = await ItemDeVenda.create({ animalId: animal1.id, vendaId: venda1.id });
+        const itemDeVenda2 = await ItemDeVenda.create({ animalId: animal2.id, vendaId: venda2.id });
+        const itemDeVenda3 = await ItemDeVenda.create({ animalId: animal3.id, vendaId: venda3.id });
+        const itemDeVenda4 = await ItemDeVenda.create({ animalId: animal4.id, vendaId: venda4.id });
 
         const vacina1 = await Vacina.create({ nome: 'Raiva' });
         const vacina2 = await Vacina.create({ nome: 'Raiva2' });
         const vacina3 = await Vacina.create({ nome: 'Raiva3' });
         const vacina4 = await Vacina.create({ nome: 'Raiva4' });
 
-        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinid: 1});
+        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinaId: 1});
+
+        const vacinacao1 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 1})
+        const vacinacao2 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 2})
+        const vacinacao3 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 3})
+        const vacinacao4 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 4})
     })();
 }
 

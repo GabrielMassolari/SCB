@@ -56,6 +56,14 @@ class GalpaoService {
 
     return media[0];
   }
+
+  static async mediaPesoGalpao(galpao) {
+    //Criar SQL para Postgresql
+    const sql = "SELECT AVG(peso) as media FROM animais WHERE galpao_id = :galpaoId;";
+    const media = await sequelize.query(sql, { replacements: { galpaoId: galpao } ,  type: QueryTypes.SELECT });
+
+    return media[0];
+  }
   
 }
 

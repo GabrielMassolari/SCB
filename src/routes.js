@@ -8,6 +8,8 @@ import { ClienteController } from './controllers/ClienteController.js';
 import { CaminhaoController } from './controllers/CaminhaoController.js';
 import { FuncionarioController } from './controllers/FuncionarioController.js';
 import { EntradaController } from "./controllers/EntradaController.js";
+import { VacinacaoController } from "./controllers/VacinacaoController.js";
+
 
 const routes = express.Router();
 
@@ -58,5 +60,11 @@ routes.get('/entradas/:id', EntradaController.findByPk);
 routes.post('/entradas', EntradaController.create);
 routes.put('/entradas/:id', EntradaController.update);
 routes.delete('/entradas/:id', EntradaController.delete);
+
+routes.get('/vacinacoes', VacinacaoController.findAll);
+routes.get('/vacinacoes/:id', VacinacaoController.findByPk);
+routes.post('/vacinacoes', VacinacaoController.create);
+routes.put('/vacinacoes/:id', VacinacaoController.update);
+routes.delete('/vacinacoes/:id', VacinacaoController.delete);
 
 export default routes;

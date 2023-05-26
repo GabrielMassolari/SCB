@@ -5,11 +5,11 @@ class Venda extends Model {
 
   static init(sequelize) {
     super.init({
-      valor: {
+      preco: {
         type: DataTypes.FLOAT,
         allowNull: false,
         validate: {
-            notEmpty: {msg: "Valor deve ser preenchido!"}
+            notEmpty: {msg: "Preco deve ser preenchido!"}
           }
       },
       distanciaEntrega: {
@@ -17,7 +17,15 @@ class Venda extends Model {
         validate: {
             notEmpty: {msg: "A distancia deve ser preenchida!"}
           }
-      }
+      },
+      dataVenda: {
+        type: DataTypes.DATEONLY,
+        validate: {
+            isDate: { msg: "Data da Venda deve ser preenchida!" },
+            is: {args: ["[0-9]{4}\-[0-9]{2}\-[0-9]{2}"], msg: "Data da Venda deve seguir o padrão yyyy-MM-dd!" },
+            notEmpty: {msg: "Data de Venda deve ser preenchido!"},
+          }
+      },
     }, { sequelize, modelName: 'venda', tableName: 'vendas' })
   }
 

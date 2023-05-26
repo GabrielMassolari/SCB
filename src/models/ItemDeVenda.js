@@ -5,14 +5,6 @@ class ItemDeVenda extends Model {
 
   static init(sequelize) {
     super.init({
-        preco: {
-            type: DataTypes.DOUBLE,
-            allowNull: false,
-            validate: {
-              isFloat: { msg: "Preço do Animal deve ser preenchido com um valor decimal!" },
-              notEmpty: {msg: "Preço do Animal deve ser preenchido!"}
-            }
-          },
     }, { sequelize, modelName: 'itemDeVenda', tableName: 'itemDeVenda' })
   }
 
