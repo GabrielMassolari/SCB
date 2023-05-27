@@ -38,7 +38,7 @@ class VendaService {
             try {
                 await Promise.all(animais.map(async item => (await ItemDeVenda.create({ vendaId: obj.id, animalId: item.id }, { transaction: t }))));
                 await t.commit();
-                return { "message": "ok" }
+                return await Venda.findByPk(obj.id, { include: { all: true, nested: true } });
             } catch (error) {
                 await t.rollback();
                 throw "Pelo menos um dos animais informadas não foi encontrada!" + error;
