@@ -10,64 +10,61 @@ import { ItemDeVenda } from "../models/ItemDeVenda.js";
 
 class VendaService {
     static async findAll() {
-        const objs = await Entrada.findAll({ include: { all: true, nested: true } });
+        const objs = await Venda.findAll({ include: { all: true, nested: true } });
         return objs;
     }
 
     static async findByPk(req) {
         const { id } = req.params;
-        const obj = await Entrada.findByPk(id, { include: { all: true, nested: true } });
+        const obj = await Venda.findByPk(id, { include: { all: true, nested: true } });
         return obj;
     }
 
     static async create(req) {
-        const { distanciaEntrega, dataVenda, preco, cliente, caminhao, animais } = req.body;
+        const { distanciaEntrega, dataVenda, preco, cliente, caminhao, galpao } = req.body;
+
+        const animais = await GalpaoService.animaisPorGalpao(galpao);
+        const kmRodados = await this.quilometrosRodadosMesAtual(cliente);
+        let precoFrete = preco;
+        console.log(kmRodados)
+
         if (await this.verificarRegrasDeNegocio(req)) {
-            if(this.quilometrosRodadosMesAtual(cliente)['soma'] <= 1000) {
+            if (kmRodados['soma'] <= 1000) {
                 //10% taxa de frete
-                preco = preco * 1.10;
+                precoFrete = preco * 1.10;
             }
             const t = await sequelize.transaction();
-            const obj = await Venda.create({ distanciaEntrega, dataVenda, preco, clienteId: cliente, caminhaoId: caminhao }, { transaction: t });
+            const obj = await Venda.create({ distanciaEntrega, dataVenda, preco: precoFrete, clienteId: cliente, caminhaoId: caminhao }, { transaction: t });
             try {
-                await Promise.all(animais.map(async item => (await ItemDeVenda.create({vendaId: obj.id, animalId: item.id}))));
+                await Promise.all(animais.map(async item => (await ItemDeVenda.create({ vendaId: obj.id, animalId: item.id }, { transaction: t }))));
                 await t.commit();
-                return {"message": "ok"}
+                return { "message": "ok" }
             } catch (error) {
                 await t.rollback();
-                throw "Pelo menos um dos animais informadas não foi encontrada!";
+                throw "Pelo menos um dos animais informadas não foi encontrada!" + error;
             }
         }
     }
 
     static async update(req) {
         const { id } = req.params;
-        const { data, valor, cliente, itens } = req.body;
-        const obj = await Emprestimo.findByPk(id, { include: { all: true, nested: true } });
-        if (obj == null) throw 'Empréstimo não encontrado!';
-        const t = await sequelize.transaction();
-        Object.assign(obj, { data, valor, clienteId: cliente.id });
-        await obj.save({ transaction: t });
-        try {
-            await Promise.all((await obj.itens).map(item => item.destroy({ transaction: t }))); // destruindo todos itens deste empréstimo
-            await Promise.all(itens.map(item => obj.createItem({ valor: item.valor, entrega: item.entrega, emprestimoId: obj.id, fitaId: item.fita.id }, { transaction: t })));
-            await t.commit();
-            return await Emprestimo.findByPk(obj.id, { include: { all: true, nested: true } });
-        } catch (error) {
-            await t.rollback();
-            throw "Pelo menos uma das fitas informadas não foi encontrada!";
-        }
+        const { distanciaEntrega, dataVenda, preco, cliente, caminhao, animais } = req.body;
+        const obj = await Venda.findByPk(id, { include: { all: true, nested: true } });
+        if (obj == null) throw 'Venda não encontrado!';
+        Object.assign(obj, { distanciaEntrega, dataVenda, preco, cliente, caminhao, animais });
+        await obj.save();
+        return await Venda.findByPk(obj.id, { include: { all: true, nested: true } });
     }
 
     static async delete(req) {
         const { id } = req.params;
-        const obj = await Emprestimo.findByPk(id);
-        if (obj == null) throw 'Empréstimo não encontrado!';
+        const obj = await Venda.findByPk(id);
+        if (obj == null) throw 'Venda não encontrado!';
         try {
             await obj.destroy();
             return obj;
         } catch (error) {
-            throw "Não é possível remover um empréstimo que possui devoluções ou multas!";
+            throw "Não é possível remover a venda";
         }
     }
 
@@ -75,7 +72,9 @@ class VendaService {
     // Regra de Negócio 1: Será verificado se o galpão já atingiu o limite diário de recebimento de animais
     // Regra de Negócio 2: Verifica se a idade do animal está próximo da média de animais que estão no galpão (a idade do animal pode ter uma variação de 6 meses em relação a média de idade dos animais contidos no galpão)
     static async verificarRegrasDeNegocio(req) {
-        const { dataEntrada, galpao, funcionario, animais } = req.body;
+        const { dataEntrada, galpao, funcionario } = req.body;
+
+        const animais = await GalpaoService.animaisPorGalpao(galpao);
 
         if (animais.length == 0) {
             throw "Deve existir, pelo menos, um animal selecionado!";
@@ -95,8 +94,8 @@ class VendaService {
     static async quilometrosRodadosMesAtual(cliente) {
         //SELECT SUM(distancia_entrega) FROM vendas WHERE strftime('%m', date('now')) = strftime('%m', data_venda) AND strftime('%Y', date('now')) = strftime('%Y', data_venda) and cliente_id = 1;
         const sql = "SELECT SUM(distancia_entrega) as soma FROM vendas WHERE strftime('%m', date('now')) = strftime('%m', data_venda) AND strftime('%Y', date('now')) = strftime('%Y', data_venda) and cliente_id = :clienteId;"
-        const sum = await sequelize.query(sql, { replacements: { clienteId: cliente }, type: QueryTypes.SELECT });  
-    
+        const sum = await sequelize.query(sql, { replacements: { clienteId: cliente }, type: QueryTypes.SELECT });
+
         return sum[0];
     }
 

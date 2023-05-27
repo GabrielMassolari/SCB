@@ -22,14 +22,16 @@ class VacinacaoService {
     }
 
     static async create(req) {
-        const { dataVacinacao, lote, funcionario, animais } = req.body;
+        const { dataVacinacao, lote, funcionario, galpao } = req.body;
+
+        const animais = await GalpaoService.animaisPorGalpao(galpao)
         if (await this.verificarRegrasDeNegocio(req)) {
             const t = await sequelize.transaction();
             try {
-                await Promise.all(animais.map(async item => ((await Animal.findByPk(item.id, { include: { all: true, nested: true } })).update({dataVacinacao: dataVacinacao}))));
-                await Promise.all(animais.map(async item => (await Vacinacao.create({dataVacinacao: dataVacinacao, loteId: lote, funcionarioId: funcionario, animalId: item.id}))));
+                await Promise.all(animais.map(async item => ((await Animal.findByPk(item.id, { include: { all: true, nested: true } })).update({ dataVacinacao: dataVacinacao }))));
+                await Promise.all(animais.map(async item => (await Vacinacao.create({ dataVacinacao: dataVacinacao, loteId: lote, funcionarioId: funcionario, animalId: item.id }))));
                 await t.commit();
-                return {'message': 'ok'}
+                return { 'message': 'ok' }
             } catch (error) {
                 await t.rollback();
                 throw "Pelo menos um dos animais informadas não foi encontrada!";
@@ -39,21 +41,12 @@ class VacinacaoService {
 
     static async update(req) {
         const { id } = req.params;
-        const { data, valor, cliente, itens } = req.body;
-        const obj = await Emprestimo.findByPk(id, { include: { all: true, nested: true } });
-        if (obj == null) throw 'Empréstimo não encontrado!';
-        const t = await sequelize.transaction();
-        Object.assign(obj, { data, valor, clienteId: cliente.id });
-        await obj.save({ transaction: t });
-        try {
-            await Promise.all((await obj.itens).map(item => item.destroy({ transaction: t }))); // destruindo todos itens deste empréstimo
-            await Promise.all(itens.map(item => obj.createItem({ valor: item.valor, entrega: item.entrega, emprestimoId: obj.id, fitaId: item.fita.id }, { transaction: t })));
-            await t.commit();
-            return await Emprestimo.findByPk(obj.id, { include: { all: true, nested: true } });
-        } catch (error) {
-            await t.rollback();
-            throw "Pelo menos uma das fitas informadas não foi encontrada!";
-        }
+        const { dataVacinacao, lote, funcionario } = req.body;
+        const obj = await Vacinacao.findByPk(id, { include: { all: true, nested: true } });
+        if (obj == null) throw 'Vacinacao não encontrada!';
+        Object.assign(obj, { dataVacinacao: dataVacinacao, loteId: lote, funcionarioId: funcionario, animalId: item.id });
+        await obj.save();
+        return await Vacinacao.findByPk(obj.id, { include: { all: true, nested: true } });
     }
 
     static async delete(req) {
@@ -72,7 +65,9 @@ class VacinacaoService {
     // Regra de Negócio 1: O funcionário só poderá vacinar um lote de animais por dia.
     // Regra de Negócio 2: Verifica se a data da última vacinação, sendo que se tiver menos de 3 meses, não será permitido vacinar o animal
     static async verificarRegrasDeNegocio(req) {
-        const { dataVacinacao, lote, funcionario, animais } = req.body;
+        const { dataVacinacao, lote, funcionario, galpao } = req.body;
+
+        const animais = await GalpaoService.animaisPorGalpao(galpao);
 
         if (animais.length == 0) {
             throw "Deve existir, pelo menos, um animal selecionado!";
@@ -80,7 +75,6 @@ class VacinacaoService {
 
         // Regra de Negócio 1: Será validado se a média de peso do lote de animais está acima de 250 kg.
         const lotesVacinadosNoDia = await FuncionarioService.getLotesVacinadosNoDia(dataVacinacao)
-
         console.log(lotesVacinadosNoDia)
         if (lotesVacinadosNoDia.length > 1) {
             throw "O funcionário já vacinou um lote hoje";

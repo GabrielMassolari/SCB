@@ -48,15 +48,15 @@ function databaseInserts() {
     (async () => {
 
         await sequelize.sync({ force: true });
-        const animal1 = await Animal.create({ nome: "Caracu", peso: 150.00, dataNascimento: "2000-02-10", dataVacinacao: "2003-03-08" });
-        const animal2 = await Animal.create({ nome: "Brangus", peso: 120.00, dataNascimento: "1998-05-11", dataVacinacao: "2000-02-10" });
+        const animal1 = await Animal.create({ nome: "Caracu", peso: 450.00, dataNascimento: "2000-02-10", dataVacinacao: "2003-03-08" });
+        const animal2 = await Animal.create({ nome: "Brangus", peso: 320.00, dataNascimento: "1998-05-11", dataVacinacao: "2000-02-10" });
         const animal3 = await Animal.create({ nome: "Nelore", peso: 140.00, dataNascimento: "2001-03-20", dataVacinacao: "2005-08-11" });
         const animal4 = await Animal.create({ nome: "Angus", peso: 90.00, dataNascimento: "2019-08-07", dataVacinacao: "2023-03-20" });
 
         const galpao1 = await Galpao.create({nome: "Galpao 1", capacidade: 100, limiteDiario: 10, maternidade: false});
         const galpao2 = await Galpao.create({nome: "Galpao 2", capacidade: 110, limiteDiario: 15, maternidade: false});
         const galpao3 = await Galpao.create({nome: "Galpao 3", capacidade: 120, limiteDiario: 20, maternidade: true});
-        const galpao4 = await Galpao.create({nome: "Galpao 4", capacidade: 130, limiteDiario: 25, maternidade: false});
+        const galpao4 = await Galpao.create({nome: "Galpao 4", capacidade: 130, limiteDiario: 2, maternidade: false});
 
         const funcionario1 = await Funcionario.create({ nome: "Jose", cpf: "111.111.111-99", dataNascimento: "2000-02-10", salario: 2000 })
         const funcionario2= await Funcionario.create({ nome: "Diogo", cpf: "111.111.111-22", dataNascimento: "2000-05-10", salario: 3000 })
@@ -64,9 +64,9 @@ function databaseInserts() {
         const funcionario4 = await Funcionario.create({ nome: "Sebastiao", cpf: "111.111.111-44", dataNascimento: "2000-12-10", salario: 1000 })
 
         const entrada1 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 1 });
-        const entrada2 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 2 });
-        const entrada3 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 3 });
-        const entrada4 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 4 });
+        const entrada2 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 2, funcionarioId: 2 });
+        const entrada3 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 3, funcionarioId: 3 });
+        const entrada4 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 4, funcionarioId: 4 });
 
         animal1.update({galpaoId: 1, entradaId: 1})
         animal2.update({galpaoId: 2, entradaId: 2})
@@ -86,7 +86,7 @@ function databaseInserts() {
         const venda1 = await Venda.create({ distanciaEntrega: 20, dataVenda: "2023-05-10", preco: 2000, clienteId: cliente1.id, caminhaoId: caminhao1.id });
         const venda2 = await Venda.create({ distanciaEntrega: 50, dataVenda: "2023-05-10", preco: 3000, clienteId: cliente2.id, caminhaoId: caminhao2.id });
         const venda3 = await Venda.create({ distanciaEntrega: 65, dataVenda: "2022-05-10", preco: 1000, clienteId: cliente3.id, caminhaoId: caminhao3.id });
-        const venda4 = await Venda.create({ distanciaEntrega: 87, dataVenda: "2022-02-10", preco:200, clienteId: cliente3.id, caminhaoId: caminhao4.id });
+        const venda4 = await Venda.create({ distanciaEntrega: 1200, dataVenda: "2023-05-10", preco:200, clienteId: cliente4.id, caminhaoId: caminhao4.id });
 
         const itemDeVenda1 = await ItemDeVenda.create({ animalId: animal1.id, vendaId: venda1.id });
         const itemDeVenda2 = await ItemDeVenda.create({ animalId: animal2.id, vendaId: venda2.id });
