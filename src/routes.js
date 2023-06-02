@@ -11,6 +11,7 @@ import { EntradaController } from "./controllers/EntradaController.js";
 import { VacinacaoController } from "./controllers/VacinacaoController.js";
 import { VendaService } from "./services/VendaService.js";
 import { VendaController } from "./controllers/VendaController.js";
+import { Lote } from "./models/Lote.js";
 
 
 const routes = express.Router();
@@ -32,6 +33,7 @@ routes.get('/lotes/:id', LoteController.findByPk);
 routes.post('/lotes', LoteController.create);
 routes.put('/lotes/:id', LoteController.update);
 routes.delete('/lotes/:id', LoteController.delete);
+routes.get('/lotes/getLotesProximosVencer/:vacina', LoteController.getLotesProximosVencer);
 
 routes.get('/vacinas', VacinaController.findAll);
 routes.get('/vacinas/:id', VacinaController.findByPk);
@@ -62,17 +64,22 @@ routes.get('/entradas/:id', EntradaController.findByPk);
 routes.post('/entradas', EntradaController.create);
 routes.put('/entradas/:id', EntradaController.update);
 routes.delete('/entradas/:id', EntradaController.delete);
+routes.get('/entradas/getMediaEntradaAnimais/:inicio/:termino', EntradaController.getMediaEntradaAnimais);
+routes.get('/entradas/getTotalAnimaisMesAtual', EntradaController.getTotalAnimaisMesAtual);
 
 routes.get('/vacinacoes', VacinacaoController.findAll);
 routes.get('/vacinacoes/:id', VacinacaoController.findByPk);
 routes.post('/vacinacoes', VacinacaoController.create);
 routes.put('/vacinacoes/:id', VacinacaoController.update);
 routes.delete('/vacinacoes/:id', VacinacaoController.delete);
+routes.get('/vacinacoes/getTotalVacinasAplicadas/:inicio/:termino', VacinacaoController.getTotalVacinasAplicadas);
 
 routes.get('/vendas', VendaController.findAll);
 routes.get('/vendas/:id', VendaController.findByPk);
 routes.post('/vendas', VendaController.create);
 routes.put('/vendas/:id', VendaController.update);
 routes.delete('/vendas/:id', VendaController.delete);
+routes.get('/vendas/getTotalVendasPorCliente/:inicio/:termino', VendaController.getTotalVendasPorCliente);
+routes.get('/vendas/getMediaPesoAnimaisVendidos/:inicio/:termino', VendaController.getMediaPesoAnimaisVendidos);
 
 export default routes;

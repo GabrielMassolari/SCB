@@ -59,6 +59,40 @@ class EntradaService {
     }
   }
 
+  static async getMediaEntradaAnimais(req) {
+    const { inicio, termino } = req.params;
+
+    const objs = await sequelize.query(`SELECT g.nome, AVG(total_animais) AS media_diaria
+      FROM (
+        SELECT g.nome as nome, COUNT(*) AS total_animais
+        FROM animais a,
+        entradas e,
+        galpoes g
+        WHERE e.galpao_id = g.id
+        AND e.id = a.entrada_id
+        AND e.data_entrada >= :inicio 
+        AND e.data_entrada <= :termino
+        GROUP BY g.nome
+      ) AS subquery
+      JOIN galpoes AS g ON g.nome = subquery.nome
+      GROUP BY g.nome;`, 
+      { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+
+      return objs;
+  }
+
+  static async getTotalAnimaisMesAtual() {
+    const objs = await sequelize.query(`
+    SELECT COUNT(*) AS total_animais
+    FROM animais AS a
+    JOIN entradas AS e ON e.id = a.entrada_id
+    WHERE strftime('%Y-%m', e.data_entrada) = strftime('%Y-%m', 'now');`, 
+    { type: QueryTypes.SELECT });
+
+      return objs;
+  }
+
+
   // Implementando as regras de negócio relacionadas ao processo de negócio Empréstimo
   // Regra de Negócio 1: Será verificado se o galpão já atingiu o limite diário de recebimento de animais
   // Regra de Negócio 2: Verifica se a idade do animal está próximo da média de animais que estão no galpão (a idade do animal pode ter uma variação de 6 meses em relação a média de idade dos animais contidos no galpão)

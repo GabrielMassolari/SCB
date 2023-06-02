@@ -31,6 +31,18 @@ class VendaController {
             .then(obj => res.json(obj))
             .catch(next);
     }
+
+    static async getTotalVendasPorCliente(req, res, next) {
+        VendaService.getTotalVendasPorCliente(req)
+            .then(obj => res.json(obj))
+            .catch(next);
+    }
+
+    static async getMediaPesoAnimaisVendidos(req, res, next) {
+        VendaService.getMediaPesoAnimaisVendidos(req)
+            .then(obj => res.json(obj))
+            .catch(next);
+    }
 }
 
 export { VendaController };

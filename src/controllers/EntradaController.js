@@ -31,6 +31,18 @@ class EntradaController {
       .then(obj => res.json(obj))
       .catch(next);
   }
+
+  static async getMediaEntradaAnimais(req, res, next) {
+    EntradaService.getMediaEntradaAnimais(req)
+      .then(obj => res.json(obj))
+      .catch(next);
+  }
+
+  static async getTotalAnimaisMesAtual(req, res, next) {
+    EntradaService.getTotalAnimaisMesAtual()
+      .then(obj => res.json(obj))
+      .catch(next);
+  }
 }
 
 export { EntradaController };

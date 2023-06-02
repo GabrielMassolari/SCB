@@ -68,6 +68,42 @@ class VendaService {
         }
     }
 
+    static async getTotalVendasPorCliente(req) {
+        const { inicio, termino } = req.params;
+
+        const objs = await sequelize.query(`
+        SELECT c.nome, SUM(v.preco) as valor_total
+        FROM clientes c,
+        vendas v
+        WHERE v.cliente_id = c.id
+        AND v.data_venda > :inicio
+        AND v.data_venda < :termino
+        GROUP BY c.nome;`, 
+        { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+  
+        return objs;
+    }
+
+    
+
+    static async getMediaPesoAnimaisVendidos(req) {
+        const { inicio, termino } = req.params;
+
+        const objs = await sequelize.query(`
+        SELECT strftime('%Y-%m', v.data_venda), AVG(a.peso)
+        FROM animais a,
+        vendas v,
+        itemDeVenda iv
+        WHERE v.id = iv.venda_id
+        AND iv.animal_id = a.id
+        AND v.data_venda > :inicio
+        AND v.data_venda < :termino
+        GROUP BY strftime('%Y-%m', v.data_venda);`, 
+        { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+  
+        return objs;
+    }
+
     // Implementando as regras de negócio relacionadas ao processo de negócio Empréstimo
     // Regra de Negócio 1: Será verificado se o galpão já atingiu o limite diário de recebimento de animais
     // Regra de Negócio 2: Verifica se a idade do animal está próximo da média de animais que estão no galpão (a idade do animal pode ter uma variação de 6 meses em relação a média de idade dos animais contidos no galpão)

@@ -61,6 +61,24 @@ class VacinacaoService {
         }
     }
 
+    static async getTotalVacinasAplicadas(req) {
+        const { inicio, termino } = req.params;
+
+        const objs = await sequelize.query(`
+        SELECT v.nome, COUNT(*) as quantidade
+        FROM vacinas v,
+        lotes l,
+        Vacinacoes va
+        WHERE v.id = l.vacinaid 
+        AND va.lote_id = l.id
+        AND va.data_vacinacao > :inicio
+        AND va.data_vacinacao < :termino
+        GROUP BY v.nome;`, 
+        { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+  
+        return objs;
+    }
+
     // Implementando as regras de negócio relacionadas ao processo de negócio Empréstimo
     // Regra de Negócio 1: O funcionário só poderá vacinar um lote de animais por dia.
     // Regra de Negócio 2: Verifica se a data da última vacinação, sendo que se tiver menos de 3 meses, não será permitido vacinar o animal

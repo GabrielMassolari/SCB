@@ -63,9 +63,9 @@ function databaseInserts() {
         const funcionario3 = await Funcionario.create({ nome: "Joao P", cpf: "111.111.111-33", dataNascimento: "2000-05-13'", salario: 4000 })
         const funcionario4 = await Funcionario.create({ nome: "Sebastiao", cpf: "111.111.111-44", dataNascimento: "2000-12-10", salario: 1000 })
 
-        const entrada1 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 1, funcionarioId: 1 });
-        const entrada2 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 2, funcionarioId: 2 });
-        const entrada3 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 3, funcionarioId: 3 });
+        const entrada1 = await Entrada.create({ dataEntrada: "2023-06-14", galpaoId: 1, funcionarioId: 1 });
+        const entrada2 = await Entrada.create({ dataEntrada: "2023-06-14", galpaoId: 2, funcionarioId: 2 });
+        const entrada3 = await Entrada.create({ dataEntrada: "2023-06-14", galpaoId: 3, funcionarioId: 3 });
         const entrada4 = await Entrada.create({ dataEntrada: "2023-04-14", galpaoId: 4, funcionarioId: 4 });
 
         animal1.update({galpaoId: 1, entradaId: 1})
@@ -98,7 +98,7 @@ function databaseInserts() {
         const vacina3 = await Vacina.create({ nome: 'Raiva3' });
         const vacina4 = await Vacina.create({ nome: 'Raiva4' });
 
-        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinaId: 1});
+        const lote1 = await Lote.create({lote: 'teste1', quantidadeDoses: 100, dataVencimento: '2023-05-10', vacinaid: 1});
 
         const vacinacao1 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 1})
         const vacinacao2 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 2})

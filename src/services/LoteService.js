@@ -1,5 +1,5 @@
 import { Lote } from "../models/Lote.js";
-
+import { QueryTypes } from 'sequelize';
 import sequelize from '../config/database-connection.js';
 
 class LoteService {
@@ -37,6 +37,21 @@ class LoteService {
         if (obj == null) throw 'Lote não encontrado!';
         await obj.destroy();
         return obj;
+    }
+
+    static async getLotesProximosVencer(req) {
+        const { vacina } = req.params
+        
+        const objs = await sequelize.query(`
+        SELECT l.lote, l.data_vencimento
+        FROM lotes l,
+        vacinas v
+        WHERE l.vacinaid = v.id
+        AND v.id = :vacina
+        ORDER BY l.data_vencimento;`, 
+        { replacements: { vacina: vacina }, type: QueryTypes.SELECT });
+  
+        return objs;
     }
 }
 

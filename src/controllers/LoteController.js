@@ -31,6 +31,12 @@ class LoteController {
             .then(obj => res.json(obj))
             .catch(next);
     }
+
+    static async getLotesProximosVencer(req, res, next) {
+        LoteService.getLotesProximosVencer(req)
+            .then(obj => res.json(obj))
+            .catch(next);
+    }
 }
 
 export { LoteController };
