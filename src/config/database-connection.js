@@ -47,7 +47,8 @@ databaseInserts(); // comentar quando estiver em ambiente de produção (não cr
 function databaseInserts() {
     (async () => {
 
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
+        /*
         const animal1 = await Animal.create({ nome: "Caracu", peso: 450.00, dataNascimento: "2000-02-10", dataVacinacao: "2003-03-08" });
         const animal2 = await Animal.create({ nome: "Brangus", peso: 320.00, dataNascimento: "1998-05-11", dataVacinacao: "2000-02-10" });
         const animal3 = await Animal.create({ nome: "Nelore", peso: 140.00, dataNascimento: "2001-03-20", dataVacinacao: "2005-08-11" });
@@ -104,6 +105,7 @@ function databaseInserts() {
         const vacinacao2 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 2})
         const vacinacao3 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 3})
         const vacinacao4 = await Vacinacao.create({dataVacinacao: '2023-01-01', funcionarioId: 1, loteId: 1, animalId: 4})
+*/
     })();
 }
 

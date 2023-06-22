@@ -17,7 +17,7 @@ class AnimalService {
 
   static async create(req) {
     const { nome, peso, dataNascimento, dataVacinacao, galpao } = req.body;
-    const obj = await Animal.create({ nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id });
+    const obj = await Animal.create({ nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao });
     return await Animal.findByPk(obj.id, { include: { all: true, nested: true } });
   }
 
@@ -26,7 +26,7 @@ class AnimalService {
     const { nome, peso, dataNascimento, dataVacinacao, galpao  } = req.body;
     const obj = await Animal.findByPk(id, { include: { all: true, nested: true } });
     if (obj == null) throw 'Animal não encontrado!';
-    Object.assign(obj, { nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao.id });
+    Object.assign(obj, { nome, peso, dataNascimento, dataVacinacao, galpaoId: galpao });
     await obj.save();
     return await Animal.findByPk(obj.id, { include: { all: true, nested: true } });
   }

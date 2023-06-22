@@ -89,17 +89,28 @@ class VendaService {
     static async getMediaPesoAnimaisVendidos(req) {
         const { inicio, termino } = req.params;
 
+        // const objs = await sequelize.query(`
+        // SELECT strftime('%Y-%m', v.data_venda), AVG(a.peso)
+        // FROM animais a,
+        // vendas v,
+        // itemDeVenda iv
+        // WHERE v.id = iv.venda_id
+        // AND iv.animal_id = a.id
+        // AND v.data_venda > :inicio
+        // AND v.data_venda < :termino
+        // GROUP BY strftime('%Y-%m', v.data_venda);`, 
+        // { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+
+        
         const objs = await sequelize.query(`
-        SELECT strftime('%Y-%m', v.data_venda), AVG(a.peso)
-        FROM animais a,
-        vendas v,
-        itemDeVenda iv
-        WHERE v.id = iv.venda_id
-        AND iv.animal_id = a.id
-        AND v.data_venda > :inicio
+        SELECT to_char(v.data_venda, 'YYYY-MM') as data, AVG(a.peso) as media_peso
+        FROM animais a
+        INNER JOIN itemDeVenda iv ON iv.animal_id = a.id
+        INNER JOIN vendas v ON v.id = iv.venda_id
+        WHERE v.data_venda > :inicio
         AND v.data_venda < :termino
-        GROUP BY strftime('%Y-%m', v.data_venda);`, 
-        { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT });
+        GROUP BY to_char(v.data_venda, 'YYYY-MM');`, 
+        { replacements: { inicio: inicio, termino: termino }, type: QueryTypes.SELECT })
   
         return objs;
     }
@@ -129,7 +140,8 @@ class VendaService {
 
     static async quilometrosRodadosMesAtual(cliente) {
         //SELECT SUM(distancia_entrega) FROM vendas WHERE strftime('%m', date('now')) = strftime('%m', data_venda) AND strftime('%Y', date('now')) = strftime('%Y', data_venda) and cliente_id = 1;
-        const sql = "SELECT SUM(distancia_entrega) as soma FROM vendas WHERE strftime('%m', date('now')) = strftime('%m', data_venda) AND strftime('%Y', date('now')) = strftime('%Y', data_venda) and cliente_id = :clienteId;"
+        //const sql = "SELECT SUM(distancia_entrega) as soma FROM vendas WHERE strftime('%m', date('now')) = strftime('%m', data_venda) AND strftime('%Y', date('now')) = strftime('%Y', data_venda) and cliente_id = :clienteId;"
+        const sql = "SELECT SUM(distancia_entrega) as soma FROM vendas WHERE EXTRACT(MONTH FROM current_date) = EXTRACT(MONTH FROM data_venda) AND EXTRACT(YEAR FROM current_date) = EXTRACT(YEAR FROM data_venda) AND cliente_id = :clienteId;"
         const sum = await sequelize.query(sql, { replacements: { clienteId: cliente }, type: QueryTypes.SELECT });
 
         return sum[0];

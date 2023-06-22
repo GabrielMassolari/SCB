@@ -52,7 +52,9 @@ class GalpaoService {
 
   static async mediaIdadeGalpao(galpao) {
     //Criar SQL para Postgresql
-    const sql = "SELECT avg(((JulianDay('now')) - JulianDay(data_nascimento))/365.25) as media FROM animais a, entradas e WHERE a.entrada_id = e.id AND e.galpao_id = :galpaoId;";
+    //const sql = "SELECT avg(((JulianDay('now')) - JulianDay(data_nascimento))/365.25) as media FROM animais a, entradas e WHERE a.entrada_id = e.id AND e.galpao_id = :galpaoId;";
+    
+    const sql = "SELECT avg((extract(epoch from current_timestamp) - extract(epoch from data_nascimento))/(365.25 * 24 * 60 * 60)) as media FROM animais a JOIN entradas e ON a.entrada_id = e.id WHERE e.galpao_id = :galpaoId;";
     const media = await sequelize.query(sql, { replacements: { galpaoId: galpao }, type: QueryTypes.SELECT });
 
     return media[0];

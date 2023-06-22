@@ -41,7 +41,7 @@ class FuncionarioService {
     }
 
     static async getLotesVacinadosNoDia(data){    
-        const sql = "SELECT a.galpao_id as galpao, COUNT(*) FROM Vacinacoes v, animais a, entradas e WHERE v.animal_id = a.id AND a.entrada_id = e.id AND v.data_vacinacao = :data GROUP BY e.galpao_id;"
+        const sql = "SELECT e.galpao_id as galpao, COUNT(*) FROM Vacinacoes v, animais a, entradas e WHERE v.animal_id = a.id AND a.entrada_id = e.id AND v.data_vacinacao = :data GROUP BY e.galpao_id;"
         const count = await sequelize.query(sql, { replacements: { data: data }, type: QueryTypes.SELECT });  
     
         return count;

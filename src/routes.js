@@ -65,7 +65,7 @@ routes.post('/entradas', EntradaController.create);
 routes.put('/entradas/:id', EntradaController.update);
 routes.delete('/entradas/:id', EntradaController.delete);
 routes.get('/entradas/getMediaEntradaAnimais/:inicio/:termino', EntradaController.getMediaEntradaAnimais);
-routes.get('/entradas/getTotalAnimaisMesAtual', EntradaController.getTotalAnimaisMesAtual);
+routes.get('/entrada/getTotalAnimaisMesAtual', EntradaController.getTotalAnimaisMesAtual);
 
 routes.get('/vacinacoes', VacinacaoController.findAll);
 routes.get('/vacinacoes/:id', VacinacaoController.findByPk);

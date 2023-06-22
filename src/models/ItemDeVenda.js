@@ -5,7 +5,7 @@ class ItemDeVenda extends Model {
 
   static init(sequelize) {
     super.init({
-    }, { sequelize, modelName: 'itemDeVenda', tableName: 'itemDeVenda' })
+    }, { sequelize, modelName: 'itemdevenda', tableName: 'itemdevenda' })
   }
 
   static associate(models) {

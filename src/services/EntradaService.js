@@ -82,14 +82,23 @@ class EntradaService {
   }
 
   static async getTotalAnimaisMesAtual() {
+    // const objs = await sequelize.query(`
+    // SELECT COUNT(*) AS total_animais
+    // FROM animais AS a
+    // JOIN entradas AS e ON e.id = a.entrada_id
+    // WHERE strftime('%Y-%m', e.data_entrada) = strftime('%Y-%m', 'now');`, 
+    // { type: QueryTypes.SELECT });
+
     const objs = await sequelize.query(`
     SELECT COUNT(*) AS total_animais
     FROM animais AS a
     JOIN entradas AS e ON e.id = a.entrada_id
-    WHERE strftime('%Y-%m', e.data_entrada) = strftime('%Y-%m', 'now');`, 
+    WHERE to_char(e.data_entrada, 'YYYY-MM') = to_char(current_date, 'YYYY-MM');`, 
     { type: QueryTypes.SELECT });
 
-      return objs;
+    console.log(objs)
+
+    return objs;
   }
 
 

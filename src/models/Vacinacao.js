@@ -15,7 +15,7 @@ class Vacinacao extends Model {
                     notNull: { msg: "Data de Vacinação não pode ser nulo!" }
                 }
             }
-        }, { sequelize, modelName: 'Vacinacao', tableName: 'Vacinacoes' })
+        }, { sequelize, modelName: 'vacinacao', tableName: 'vacinacoes' })
     }
 
     static associate(models) {
